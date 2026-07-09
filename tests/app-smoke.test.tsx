@@ -1,0 +1,104 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { App } from "../src/app/App";
+
+describe("App", () => {
+  it("renders starter title", () => {
+    render(<App />);
+    expect(screen.getByText("災害資訊整理工作台")).toBeInTheDocument();
+  });
+
+  it("keeps the home page focused on phase 0 tabs", () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole("button", { name: "原始資訊" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "整理工作台" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "通報" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "地點" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "志工任務" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "人員指派" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows review states in the phase 0 workbench", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "整理工作台" }));
+
+    expect(
+      screen.getByText(
+        "第一階段的成功不是分類正確，而是把為什麼現在還不能判斷說清楚。",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("待人工確認").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("未查核").length).toBeGreaterThan(0);
+  });
+
+  it("switches raw records between card and row views", () => {
+    render(<App />);
+
+    expect(screen.getByRole("button", { name: "卡片模式" })).toHaveClass(
+      "active",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "行列模式" }));
+
+    expect(screen.getByRole("button", { name: "行列模式" })).toHaveClass(
+      "active",
+    );
+    expect(
+      screen.getByRole("table", { name: "原始資訊行列列表" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "原文摘要" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "卡片模式" }));
+
+    expect(screen.getByRole("button", { name: "卡片模式" })).toHaveClass(
+      "active",
+    );
+    expect(
+      screen.queryByRole("table", { name: "原始資訊行列列表" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("keeps draft CRUD as learner work instead of starter output", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "整理工作台" }));
+    fireEvent.click(screen.getByRole("button", { name: /M-002/ }));
+
+    expect(screen.getByText("尚未建立整理草稿")).toBeInTheDocument();
+    expect(
+      screen.getByText(/請 agent 加上建立、編輯、刪除或重設整理草稿/),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(/已產生 \d+ 筆安全邊界草稿/),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows high quality candidate reports without marking them confirmed", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "整理工作台" }));
+    fireEvent.click(screen.getByRole("button", { name: /M-009/ }));
+
+    expect(screen.getByText("高品質候選回報")).toBeInTheDocument();
+    expect(screen.getByText("候選回報")).toBeInTheDocument();
+    expect(
+      screen.getByText(/目前以信心程度作為品質判斷標準/),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("待人工確認").length).toBeGreaterThan(0);
+    expect(screen.queryByText("已確認")).not.toBeInTheDocument();
+  });
+});
