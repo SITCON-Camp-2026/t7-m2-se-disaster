@@ -71,6 +71,13 @@
 - 人類判斷理由：來源、查核狀態與品質線索會影響是否能標成候選；用明確型別可以降低 UI 文案和判斷邏輯混在一起的風險。
 - 相關檔案 / commit：`src/features/phase-0/phase0-types.ts`, `src/features/phase-0/phase0-heuristics.ts`, `src/features/phase-0/Phase0JudgementCard.tsx`
 
+### 2026-07-09 Phase 0：`01-interview-kit` 子代理模擬三人設
+
+- AI / Agent 建議：依 `docs/prompts/01-interview-kit.md` 的題綱，模擬 `新手志工`、`社區居民`、`救災協調員` 的逐題訪談回應，並在回答中標示「不確定點/需要核實」與建議跟進問題。
+- 採用 / 拒絕：採用（作為需求與介面設計的參考資料）。
+- 人類判斷理由：模擬產出提供多視角的具體需求、核實流程與 UI 期望，能幫助快速草擬核實欄位、優先排序邏輯與證據需求；同時標明 AI 可能的誤導點（例如把未核實資料視為事實），因此保留人工覆核流程。
+- 相關檔案 / commit：`docs/prompts/01-interview-kit.md`, `docs/ai-log.md`
+
 ## 課後反思
 
 ### AI 幫助最大的地方
