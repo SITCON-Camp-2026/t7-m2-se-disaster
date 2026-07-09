@@ -92,6 +92,39 @@ button {
   margin: 0;
 }
 
+.panel__actions {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
+.panel__actions p {
+  margin: 0;
+}
+
+.view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  border: 1px solid #cfd8e3;
+  border-radius: 8px;
+  padding: 3px;
+  background: #f4f7fb;
+}
+
+.view-toggle button {
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: transparent;
+  color: #344054;
+  cursor: pointer;
+}
+
+.view-toggle button.active {
+  background: #245d9d;
+  color: #ffffff;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -143,6 +176,51 @@ button {
 
 .record-card button {
   margin-top: 14px;
+}
+
+.raw-table {
+  display: grid;
+  border: 1px solid #dbe4ef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.raw-table__row {
+  display: grid;
+  grid-template-columns: 72px minmax(260px, 1fr) 120px 110px 150px 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid #dbe4ef;
+  background: #ffffff;
+}
+
+.raw-table__row:first-child {
+  border-top: 0;
+}
+
+.raw-table__header {
+  background: #f4f7fb;
+  color: #5f6b7a;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.raw-table__row--selected {
+  background: #eef6ff;
+}
+
+.raw-table__row p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.raw-table__row button {
+  border: 1px solid #cfd8e3;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #ffffff;
+  cursor: pointer;
 }
 
 .workbench {
@@ -245,6 +323,18 @@ button {
   margin-bottom: 8px;
 }
 
+.quality-signals {
+  border: 1px solid #cde8dc;
+  border-radius: 8px;
+  margin: 16px 0;
+  padding: 12px;
+  background: #effaf4;
+}
+
+.quality-signals h4 {
+  margin-top: 0;
+}
+
 .judgement-card ul,
 .workbench__checklist ul {
   padding-left: 20px;
@@ -313,6 +403,23 @@ button {
 }
 
 @media (max-width: 860px) {
+  .panel__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .panel__actions {
+    justify-items: start;
+  }
+
+  .raw-table {
+    overflow-x: auto;
+  }
+
+  .raw-table__row {
+    min-width: 820px;
+  }
+
   .workbench__layout {
     grid-template-columns: 1fr;
   }

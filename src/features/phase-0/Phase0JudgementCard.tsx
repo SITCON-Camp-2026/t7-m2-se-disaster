@@ -1,7 +1,16 @@
 import { StatusBadge } from "../../components/StatusBadge";
 import type { Phase0JudgementDraft, Phase0MessyRecord } from "./phase0-types";
 
+const qualitySignalLabels: Record<
+  Phase0JudgementDraft["qualitySignals"][number],
+  string
+> = {
+  explicit_time: "原文包含明確時間，可先列為高品質候選回報。",
+  explicit_quantity: "原文包含明確數量，可先列為高品質候選回報。",
+};
+
 const kindLabels: Record<Phase0JudgementDraft["possibleKind"], string> = {
+  report_candidate: "候選回報",
   help_request_candidate: "求助候選",
   site_status_candidate: "地點狀態候選",
   task_candidate: "任務候選",
@@ -35,12 +44,18 @@ export function Phase0JudgementCard({
   judgement: Phase0JudgementDraft;
   record: Phase0MessyRecord;
 }) {
+  const isHighQualityCandidate =
+    judgement.possibleKind === "report_candidate" &&
+    judgement.confidence !== "low";
+
   return (
     <article className="judgement-card">
       <div className="judgement-card__header">
         <div>
           <p className="eyebrow">Starter 安全預設</p>
-          <h3>尚未建立整理草稿</h3>
+          <h3>
+            {isHighQualityCandidate ? "高品質候選回報" : "尚未建立整理草稿"}
+          </h3>
         </div>
         <StatusBadge status={record.verificationStatus} />
       </div>
@@ -49,6 +64,20 @@ export function Phase0JudgementCard({
         這張卡只保留保守的安全邊界，不是 agent 對這筆資料的整理答案。請讓 coding
         agent 實作可建立、編輯與刪除的整理草稿。
       </p>
+
+      {judgement.qualitySignals.length > 0 ? (
+        <section className="quality-signals">
+          <h4>高品質候選線索</h4>
+          <p>
+            目前以信心程度作為品質判斷標準；信心程度達中以上，才顯示為高品質候選。
+          </p>
+          <ul>
+            {judgement.qualitySignals.map((item) => (
+              <li key={item}>{qualitySignalLabels[item]}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <dl className="judgement-summary">
         <div>

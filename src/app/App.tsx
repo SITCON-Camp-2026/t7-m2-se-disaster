@@ -3,7 +3,7 @@ import messyReports from "../fixtures/phase-0/messy-reports.json";
 import { EmptyState } from "../components/EmptyState";
 import { Phase0RawInfoPanel } from "../features/phase-0/Phase0RawInfoPanel";
 import { Phase0Workbench } from "../features/phase-0/Phase0Workbench";
-import type { Phase0MessyRecord } from "../features/phase-0/phase0-types";
+import { phase0MessyRecordsSchema } from "../features/phase-0/phase0-types";
 
 type TabKey = "raw" | "workbench";
 
@@ -12,7 +12,7 @@ const tabs: Array<{ key: TabKey; label: string }> = [
   { key: "workbench", label: "整理工作台" },
 ];
 
-const phase0Records = messyReports satisfies Phase0MessyRecord[];
+const phase0Records = phase0MessyRecordsSchema.parse(messyReports);
 
 export function App() {
   const [activeTab, setActiveTab] = useState<TabKey>("raw");
